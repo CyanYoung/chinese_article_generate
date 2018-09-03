@@ -10,7 +10,7 @@ from util import map_path
 
 
 seq_len = 20
-max_len = 100
+max_len = 192  # LCM of 48 & 64
 
 models = {'rnn_plain': load_model(map_path('rnn_plain')),
           'rnn_stack': load_model(map_path('rnn_stack'))}
