@@ -1,7 +1,5 @@
 import json
 
-import re
-
 
 def check_index(nums):
     for i in range(len(nums) - 1):
@@ -10,23 +8,6 @@ def check_index(nums):
         if not (num1 == next_num1 and next_num2 - num2 == 1):
             if not (next_num1 - num1 == 1 and next_num2 == 1):
                 print('{}_{} -> {}_{}'.format(num1, num2, next_num1, next_num2))
-
-
-def retrieve(path_poetry, poet, title):
-    with open(path_poetry, 'r') as f:
-        poetry = json.load(f)
-    if poet in poetry:
-        texts = list()
-        for cand in poetry[poet].keys():
-            if re.findall(title, cand):
-                texts.extend(poetry[poet][cand])
-        if texts:
-            for text in texts:
-                print('text: %s' % text)
-        else:
-            print('invalid title')
-    else:
-        print('invalid poet')
 
 
 def prepare(path_train_txt, path_train_csv, path_poetry, detail):
@@ -66,7 +47,3 @@ if __name__ == '__main__':
     path_train_csv = 'data/train.csv'
     path_poetry = 'dict/poetry.json'
     prepare(path_train_txt, path_train_csv, path_poetry, detail=False)
-    while True:
-        poet = input('poet: ')
-        title = input('title: ')
-        retrieve(path_poetry, poet, title)
