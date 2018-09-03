@@ -20,11 +20,24 @@ check_index() 检查索引的连续性，对照全唐诗库找出缺损的数据
 
 #### 4.represent
 
-在各诗正文末尾添加 # 结束符
+在各诗正文末尾添加 # 结束符，按字训练词向量，构造 embed_mat
+
+align() 将正文首字作为滑窗末字，填充或截取定长序列 align_seqs 和 next_inds
 
 #### 5.build
 
+train 90% / dev 10% 划分，next_inds 使用 to_categorical() 编码后超过内存限制
 
+get_portion() 每次读取 20% 的数据训练
+
+单层 rnn_plain 和 双层 rnn_stack 构建语言生成模型
 
 #### 6.generate
 
+通过 word_inds 建立反向字典 ind_words，将输入序列按 seq_len 填充或截取
+
+sample() 获取概率前 10 的字重新归一化
+
+当逗号、句号、结束符为最大概率时直接返回，否则按概率采样返回
+
+当生成结束符或长度超过 max_len 时停止
