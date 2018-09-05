@@ -47,9 +47,9 @@ def sample(probs, ind_words):
     return ind_words[next_ind]
 
 
-def predict(sent, name):
+def predict(sent, name, end_flag):
     next_word = ''
-    while next_word != '#' and len(sent) < max_len:
+    while next_word != end_flag and len(sent) < max_len:
         seq = word2ind.texts_to_sequences([sent])[0]
         align_seq = pad_sequences([seq], maxlen=seq_len)
         model = map_model(name)
@@ -62,5 +62,5 @@ def predict(sent, name):
 if __name__ == '__main__':
     while True:
         text = input('text: ')
-        print('plain: %s' % predict(text, 'rnn_plain'))
-        print('stack: %s' % predict(text, 'rnn_stack'))
+        print('plain: %s' % predict(text, 'rnn_plain', end_flag='#'))
+        print('stack: %s' % predict(text, 'rnn_stack', end_flag='#'))
