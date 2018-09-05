@@ -18,8 +18,6 @@ seq_len = 20
 path_word_vec = 'feat/word_vec.pkl'
 path_word2ind = 'model/word2ind.pkl'
 path_embed = 'feat/embed.pkl'
-path_align_seq = 'feat/align_seq.pkl'
-path_next_ind = 'feat/next_ind.pkl'
 
 
 def word2vec(sents, path_word_vec):
@@ -34,7 +32,7 @@ def word2vec(sents, path_word_vec):
 
 
 def embed(sents, path_word2ind, path_word_vec, path_embed):
-    model = Tokenizer(num_words=max_vocab, char_level=True)
+    model = Tokenizer(num_words=max_vocab, filters='', char_level=True)
     model.fit_on_texts(sents)
     word_inds = model.word_index
     with open(path_word2ind, 'wb') as f:
@@ -69,7 +67,7 @@ def align(sents, path_word2ind, path_align_seq, path_next_ind):
         pk.dump(next_inds, f)
 
 
-def vectorize(path_train):
+def vectorize(path_train, path_align_seq, path_next_ind):
     texts = flat_read(path_train, 'text')
     sents = add_end_flag(texts)
     word2vec(sents, path_word_vec)
@@ -79,4 +77,6 @@ def vectorize(path_train):
 
 if __name__ == '__main__':
     path_train = 'data/train.csv'
-    vectorize(path_train)
+    path_align_seq = 'feat/align_seq.pkl'
+    path_next_ind = 'feat/next_ind.pkl'
+    vectorize(path_train, path_align_seq, path_next_ind)
