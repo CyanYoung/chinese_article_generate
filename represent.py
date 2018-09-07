@@ -59,7 +59,6 @@ def align(sents, path_word2ind, path_align_seq, path_next_ind):
     for seq in seqs:
         for u_bound in range(1, len(seq)):
             align_seq = pad_sequences([seq[:u_bound]], maxlen=seq_len)[0]
-            print(align_seq, seq[u_bound])
             align_seqs.append(align_seq)
             next_inds.append(seq[u_bound])
     with open(path_align_seq, 'wb') as f:
