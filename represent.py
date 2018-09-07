@@ -70,8 +70,8 @@ def align(sents, path_word2ind, path_align_seq, path_next_ind):
 def vectorize(path_train, path_align_seq, path_next_ind):
     texts = flat_read(path_train, 'text')
     sents = add_flag(texts)
-    # word2vec(sents, path_word_vec)
-    # embed(sents, path_word2ind, path_word_vec, path_embed)
+    word2vec(sents, path_word_vec)
+    embed(sents, path_word2ind, path_word_vec, path_embed)
     align(sents, path_word2ind, path_align_seq, path_next_ind)
 
 
