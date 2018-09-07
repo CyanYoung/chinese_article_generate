@@ -12,10 +12,11 @@ from util import map_path
 seq_len = 20
 min_len = 20
 max_len = 100
+bos = '*'
+eos = '#'
 
 models = {'rnn_plain': load_model(map_path('rnn_plain')),
           'rnn_stack': load_model(map_path('rnn_stack'))}
-
 
 path_word2ind = 'model/word2ind.pkl'
 with open(path_word2ind, 'rb') as f:
@@ -37,7 +38,7 @@ def map_model(name):
         raise KeyError
 
 
-def sample(probs, sent_len, word_inds, ind_words, eos):
+def sample(probs, sent_len, word_inds, ind_words):
     max_probs = np.array(sorted(probs, reverse=True)[:10])
     max_probs = max_probs / np.sum(max_probs)
     max_inds = np.argsort(-probs)[:10]
@@ -52,9 +53,8 @@ def sample(probs, sent_len, word_inds, ind_words, eos):
     return ind_words[next_ind]
 
 
-def predict(text, name, eos):
+def predict(text, name):
     sent = text.strip()
-    bos = '*'
     if len(sent) < 1 or sent[0] != bos:
         sent = bos + sent
     next_word = ''
@@ -64,12 +64,12 @@ def predict(text, name, eos):
         align_seq = pad_sequences([seq], maxlen=seq_len)
         model = map_model(name)
         probs = model.predict(align_seq)[0]
-        next_word = sample(probs, len(sent), word_inds, ind_words, eos)
+        next_word = sample(probs, len(sent), word_inds, ind_words)
     return sent[1:]
 
 
 if __name__ == '__main__':
     while True:
         text = input('text: ')
-        print('plain: %s' % predict(text, 'rnn_plain', eos='#'))
-        print('stack: %s' % predict(text, 'rnn_stack', eos='#'))
+        print('plain: %s' % predict(text, 'rnn_plain'))
+        print('stack: %s' % predict(text, 'rnn_stack'))
