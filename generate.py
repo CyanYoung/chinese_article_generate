@@ -10,7 +10,7 @@ from util import map_path
 
 
 seq_len = 20
-max_len = 192  # LCM of 48 & 64
+max_len = 100
 
 models = {'rnn_plain': load_model(map_path('rnn_plain')),
           'rnn_stack': load_model(map_path('rnn_stack'))}
@@ -21,7 +21,7 @@ with open(path_word2ind, 'rb') as f:
     word2ind = pk.load(f)
 word_inds = word2ind.word_index
 
-puncs = ['，', '。', '#']
+puncs = ['，', '。', '*', '#']
 punc_inds = [word_inds[punc] for punc in puncs]
 
 ind_words = dict()
@@ -47,20 +47,27 @@ def sample(probs, ind_words):
     return ind_words[next_ind]
 
 
-def predict(sent, name, end_flag):
+def predict(text, name, eos):
+    sent = text.strip()
+    bos = '*'
+    if len(sent) < 1 or sent[0] != bos:
+        sent = bos + sent
     next_word = ''
-    while next_word != end_flag and len(sent) < max_len:
+    while next_word != eos and len(sent) < max_len:
         seq = word2ind.texts_to_sequences([sent])[0]
         align_seq = pad_sequences([seq], maxlen=seq_len)
         model = map_model(name)
         probs = model.predict(align_seq)[0]
         next_word = sample(probs, ind_words)
         sent = sent + next_word
-    return sent
+    if sent[-1] == eos:
+        return sent[1:-1]
+    else:
+        return sent[1:]
 
 
 if __name__ == '__main__':
     while True:
         text = input('text: ')
-        print('plain: %s' % predict(text, 'rnn_plain', end_flag='#'))
-        print('stack: %s' % predict(text, 'rnn_stack', end_flag='#'))
+        print('plain: %s' % predict(text, 'rnn_plain', eos='#'))
+        print('stack: %s' % predict(text, 'rnn_stack', eos='#'))

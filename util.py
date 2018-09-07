@@ -11,10 +11,10 @@ def flat_read(path_train, field):
     return items
 
 
-def add_end_flag(sents):
+def add_flag(sents):
     flag_sents = list()
     for sent in sents:
-        flag_sent = sent + '#'
+        flag_sent = '*' + sent + '#'
         flag_sents.append(flag_sent)
     return flag_sents
 

@@ -7,7 +7,7 @@ from gensim.models.word2vec import Word2Vec
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 
-from util import flat_read, add_end_flag
+from util import flat_read, add_flag
 
 
 embed_len = 200
@@ -26,7 +26,7 @@ def word2vec(sents, path_word_vec):
     with open(path_word_vec, 'wb') as f:
         pk.dump(word_vecs, f)
     if __name__ == '__main__':
-        words = ['，', '。', '#']
+        words = ['，', '。', '*', '#']
         for word in words:
             print(word_vecs.most_similar(word))
 
@@ -69,7 +69,7 @@ def align(sents, path_word2ind, path_align_seq, path_next_ind):
 
 def vectorize(path_train, path_align_seq, path_next_ind):
     texts = flat_read(path_train, 'text')
-    sents = add_end_flag(texts)
+    sents = add_flag(texts)
     word2vec(sents, path_word_vec)
     embed(sents, path_word2ind, path_word_vec, path_embed)
     align(sents, path_word2ind, path_align_seq, path_next_ind)
