@@ -57,8 +57,9 @@ def align(sents, path_word2ind, path_align_seq, path_next_ind):
     align_seqs = list()
     next_inds = list()
     for seq in seqs:
-        for u_bound in range(1, len(seq) - 1):
+        for u_bound in range(1, len(seq)):
             align_seq = pad_sequences([seq[:u_bound]], maxlen=seq_len)[0]
+            print(align_seq, seq[u_bound])
             align_seqs.append(align_seq)
             next_inds.append(seq[u_bound])
     with open(path_align_seq, 'wb') as f:
@@ -70,8 +71,8 @@ def align(sents, path_word2ind, path_align_seq, path_next_ind):
 def vectorize(path_train, path_align_seq, path_next_ind):
     texts = flat_read(path_train, 'text')
     sents = add_flag(texts)
-    word2vec(sents, path_word_vec)
-    embed(sents, path_word2ind, path_word_vec, path_embed)
+    # word2vec(sents, path_word_vec)
+    # embed(sents, path_word2ind, path_word_vec, path_embed)
     align(sents, path_word2ind, path_align_seq, path_next_ind)
 
 
