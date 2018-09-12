@@ -3,10 +3,10 @@ import pickle as pk
 import numpy as np
 from numpy.random import choice
 
-from keras.preprocessing.sequence import pad_sequences
 from keras.models import load_model
+from keras.preprocessing.sequence import pad_sequences
 
-from util import map_path
+from util import map_path, map_model
 
 
 seq_len = 20
@@ -14,9 +14,6 @@ min_len = 20
 max_len = 100
 bos = '*'
 eos = '#'
-
-models = {'rnn_plain': load_model(map_path('rnn_plain')),
-          'rnn_stack': load_model(map_path('rnn_stack'))}
 
 path_word2ind = 'model/word2ind.pkl'
 with open(path_word2ind, 'rb') as f:
@@ -30,12 +27,11 @@ ind_words = dict()
 for word, ind in word_inds.items():
     ind_words[ind] = word
 
+paths = {'rnn_plain': 'model/rnn_plain.h5',
+         'rnn_stack': 'model/rnn_stack.h5'}
 
-def map_model(name):
-    if name in models:
-        return models[name]
-    else:
-        raise KeyError
+models = {'rnn_plain': load_model(map_path('rnn_plain', paths)),
+          'rnn_stack': load_model(map_path('rnn_stack', paths))}
 
 
 def sample(probs, sent_len, word_inds, ind_words):
@@ -62,7 +58,7 @@ def predict(text, name):
         sent = sent + next_word
         seq = word2ind.texts_to_sequences([sent])[0]
         align_seq = pad_sequences([seq], maxlen=seq_len)
-        model = map_model(name)
+        model = map_model(name, models)
         probs = model.predict(align_seq)[0]
         next_word = sample(probs, len(sent), word_inds, ind_words)
     return sent[1:]
