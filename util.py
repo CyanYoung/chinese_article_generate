@@ -1,8 +1,8 @@
 import pandas as pd
 
 
-def flat_read(path_train, field):
-    nest_items = pd.read_csv(path_train, usecols=[field], keep_default_na=False).values
+def flat_read(path, field):
+    nest_items = pd.read_csv(path, usecols=[field], keep_default_na=False).values
     items = list()
     for nest_item in nest_items:
         items.append(nest_item[0])

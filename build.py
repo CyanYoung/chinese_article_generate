@@ -16,7 +16,6 @@ from util import map_path, map_func
 
 batch_size = 512
 
-
 path_embed = 'feat/embed.pkl'
 path_align_seq = 'feat/align_seq.pkl'
 path_next_ind = 'feat/next_ind.pkl'
