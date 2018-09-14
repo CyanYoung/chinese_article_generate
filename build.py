@@ -14,7 +14,7 @@ from nn_arch import rnn_plain, rnn_stack
 from util import map_path, map_func
 
 
-batch_size = 512
+batch_size = 32
 
 path_embed = 'feat/embed.pkl'
 path_align_seq = 'feat/align_seq.pkl'
