@@ -11,7 +11,7 @@ from keras.utils import to_categorical
 
 from nn_arch import rnn_plain, rnn_stack
 
-from util import map_path, map_func
+from util import map_item
 
 
 batch_size = 32
@@ -39,7 +39,7 @@ def compile(name, embed_mat, seq_len):
                       weights=[embed_mat], input_length=seq_len, trainable=True)
     input = Input(shape=(seq_len,), dtype='int32')
     embed_input = embed(input)
-    func = map_func(name, funcs)
+    func = map_item(name, funcs)
     output = func(embed_input, vocab_num)
     model = Model(input, output)
     model.summary()
@@ -69,7 +69,7 @@ def fit(name, epoch, embed_mat, align_seqs, next_inds):
     vocab_num, embed_len = embed_mat.shape
     seq_len = len(align_seqs[0])
     model = compile(name, embed_mat, seq_len)
-    check_point = ModelCheckpoint(map_path(name, paths), monitor='val_loss', verbose=True, save_best_only=True)
+    check_point = ModelCheckpoint(map_item(name, paths), monitor='val_loss', verbose=True, save_best_only=True)
     seq_train, ind_train, X_dev, y_dev = split(0.9, align_seqs, next_inds)
     for ratio in np.arange(0, 1, 0.2):
         X_train, y_train = get_portion(ratio, 0.2, seq_train, ind_train, vocab_num)  # limit memory
