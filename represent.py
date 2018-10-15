@@ -50,7 +50,7 @@ def embed(sents, path_word2ind, path_word_vec, path_embed):
         pk.dump(embed_mat, f)
 
 
-def align(sents, path_word2ind, path_align_seq, path_next_ind):
+def align(sents, path_align_seq, path_next_ind):
     with open(path_word2ind, 'rb') as f:
         model = pk.load(f)
     seqs = model.texts_to_sequences(sents)
@@ -72,7 +72,7 @@ def vectorize(path_train, path_align_seq, path_next_ind):
     sents = add_flag(texts)
     word2vec(sents, path_word_vec)
     embed(sents, path_word2ind, path_word_vec, path_embed)
-    align(sents, path_word2ind, path_align_seq, path_next_ind)
+    align(sents, path_align_seq, path_next_ind)
 
 
 if __name__ == '__main__':
