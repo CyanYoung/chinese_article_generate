@@ -20,8 +20,8 @@ def prepare(path_train_txt, path_train_csv, path_poetry, detail):
         for line in f:
             fields = line.strip().split('\t')
             if len(fields) != 4:
-                print(line)
-                raise SyntaxError
+                print('skip: %s', line)
+                continue
             num, title, poet, text = fields
             nums.append(num)
             poets.append(poet)
