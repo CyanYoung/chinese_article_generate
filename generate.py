@@ -34,10 +34,10 @@ models = {'rnn_plain': load_model(map_item('rnn_plain', paths)),
           'rnn_stack': load_model(map_item('rnn_stack', paths))}
 
 
-def sample(probs, sent_len, word_inds, ind_words):
-    max_probs = np.array(sorted(probs, reverse=True)[:10])
+def sample(probs, sent_len, word_inds, ind_words, cand):
+    max_probs = np.array(sorted(probs, reverse=True)[:cand])
     max_probs = max_probs / np.sum(max_probs)
-    max_inds = np.argsort(-probs)[:10]
+    max_inds = np.argsort(-probs)[:cand]
     if max_inds[0] in punc_inds:
         next_ind = max_inds[0]
     elif sent_len < min_len:
@@ -60,7 +60,7 @@ def predict(text, name):
         align_seq = pad_sequences([seq], maxlen=seq_len)
         model = map_item(name, models)
         probs = model.predict(align_seq)[0]
-        next_word = sample(probs, len(sent), word_inds, ind_words)
+        next_word = sample(probs, len(sent), word_inds, ind_words, cand=10)
     return sent[1:]
 
 

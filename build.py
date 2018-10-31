@@ -57,26 +57,26 @@ def split(ratio, align_seqs, next_inds):
     return seq_train, ind_train, X_dev, y_dev
 
 
-def get_portion(ratio, step, seq_train, ind_train, vocab_num):
-    l_bound = int(len(seq_train) * ratio)
-    u_bound = int(len(seq_train) * (ratio + step))
+def get_part(l_rate, step, seq_train, ind_train, vocab_num):
+    l_bound = int(len(seq_train) * l_rate)
+    u_bound = int(len(seq_train) * (l_rate + step))
     X = np.array(seq_train[l_bound:u_bound])
     y = to_categorical(ind_train[l_bound:u_bound], vocab_num)
     return X, y
 
 
-def fit(name, epoch, embed_mat, align_seqs, next_inds):
+def fit(name, epoch, embed_mat, align_seqs, next_inds, step):
     vocab_num, embed_len = embed_mat.shape
     seq_len = len(align_seqs[0])
     model = compile(name, embed_mat, seq_len)
     check_point = ModelCheckpoint(map_item(name, paths), monitor='val_loss', verbose=True, save_best_only=True)
     seq_train, ind_train, X_dev, y_dev = split(0.9, align_seqs, next_inds)
-    for ratio in np.arange(0, 1, 0.2):
-        X_train, y_train = get_portion(ratio, 0.2, seq_train, ind_train, vocab_num)  # limit memory
+    for l_rate in np.arange(0, 1, step):
+        X_train, y_train = get_part(l_rate, step, seq_train, ind_train, vocab_num)  # limit memory
         model.fit(X_train, y_train, batch_size=batch_size, epochs=epoch,
                   verbose=True, callbacks=[check_point], validation_data=(X_dev, y_dev))
 
 
 if __name__ == '__main__':
-    fit('rnn_plain', 10, embed_mat, align_seqs, next_inds)
-    fit('rnn_stack', 10, embed_mat, align_seqs, next_inds)
+    fit('rnn_plain', 10, embed_mat, align_seqs, next_inds, step=0.2)
+    fit('rnn_stack', 10, embed_mat, align_seqs, next_inds, step=0.2)
