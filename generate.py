@@ -9,6 +9,13 @@ from keras.preprocessing.sequence import pad_sequences
 from util import map_item
 
 
+def ind2word(word_inds):
+    ind_words = dict()
+    for word, ind in word_inds.items():
+        ind_words[ind] = word
+    return ind_words
+
+
 seq_len = 20
 min_len = 20
 max_len = 100
@@ -19,13 +26,10 @@ path_word2ind = 'model/word2ind.pkl'
 with open(path_word2ind, 'rb') as f:
     word2ind = pk.load(f)
 word_inds = word2ind.word_index
+ind_words = ind2word(word_inds)
 
 puncs = ['，', '。']
 punc_inds = [word_inds[punc] for punc in puncs]
-
-ind_words = dict()
-for word, ind in word_inds.items():
-    ind_words[ind] = word
 
 paths = {'rnn_plain': 'model/rnn_plain.h5',
          'rnn_stack': 'model/rnn_stack.h5'}
