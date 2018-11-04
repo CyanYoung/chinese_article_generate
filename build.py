@@ -47,11 +47,11 @@ def compile(name, embed_mat, seq_len):
     return model
 
 
-def split(ratio, align_seqs, next_inds):
+def split(rate, align_seqs, next_inds):
     seqs_inds = list(zip(align_seqs, next_inds))
     shuffle(seqs_inds)
     align_seqs, next_inds = zip(*seqs_inds)
-    bound = int(len(align_seqs) * ratio)
+    bound = int(len(align_seqs) * rate)
     seq_train, ind_train = align_seqs[:bound], next_inds[:bound]
     X_dev, y_dev = np.array(align_seqs[bound:]), to_categorical(next_inds[bound:])
     return seq_train, ind_train, X_dev, y_dev
