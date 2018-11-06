@@ -25,6 +25,7 @@ eos = '#'
 path_word2ind = 'model/word2ind.pkl'
 with open(path_word2ind, 'rb') as f:
     word2ind = pk.load(f)
+
 word_inds = word2ind.word_index
 ind_words = ind2word(word_inds)
 

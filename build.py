@@ -47,22 +47,23 @@ def compile(name, embed_mat, seq_len):
     return model
 
 
-def split(rate, align_seqs, next_inds):
+def split(rate, align_seqs, next_inds, vocab_num):
     seqs_inds = list(zip(align_seqs, next_inds))
     shuffle(seqs_inds)
     align_seqs, next_inds = zip(*seqs_inds)
     bound = int(len(align_seqs) * rate)
     seq_train, ind_train = align_seqs[:bound], next_inds[:bound]
-    X_dev, y_dev = np.array(align_seqs[bound:]), to_categorical(next_inds[bound:])
-    return seq_train, ind_train, X_dev, y_dev
+    x_dev = np.array(align_seqs[bound:])
+    y_dev = to_categorical(next_inds[bound:], num_classes=vocab_num)
+    return seq_train, ind_train, x_dev, y_dev
 
 
 def get_part(l_rate, step, seq_train, ind_train, vocab_num):
     l_bound = int(len(seq_train) * l_rate)
     u_bound = int(len(seq_train) * (l_rate + step))
-    X = np.array(seq_train[l_bound:u_bound])
-    y = to_categorical(ind_train[l_bound:u_bound], vocab_num)
-    return X, y
+    x_train = np.array(seq_train[l_bound:u_bound])
+    y_train = to_categorical(ind_train[l_bound:u_bound], num_classes=vocab_num)
+    return x_train, y_train
 
 
 def fit(name, epoch, embed_mat, align_seqs, next_inds, step):
@@ -70,11 +71,11 @@ def fit(name, epoch, embed_mat, align_seqs, next_inds, step):
     seq_len = len(align_seqs[0])
     model = compile(name, embed_mat, seq_len)
     check_point = ModelCheckpoint(map_item(name, paths), monitor='val_loss', verbose=True, save_best_only=True)
-    seq_train, ind_train, X_dev, y_dev = split(0.9, align_seqs, next_inds)
+    seq_train, ind_train, x_dev, y_dev = split(0.9, align_seqs, next_inds, vocab_num)
     for l_rate in np.arange(0, 1, step):
-        X_train, y_train = get_part(l_rate, step, seq_train, ind_train, vocab_num)  # limit memory
-        model.fit(X_train, y_train, batch_size=batch_size, epochs=epoch,
-                  verbose=True, callbacks=[check_point], validation_data=(X_dev, y_dev))
+        x_train, y_train = get_part(l_rate, step, seq_train, ind_train, vocab_num)  # limit memory
+        model.fit(x_train, y_train, batch_size=batch_size, epochs=epoch,
+                  verbose=True, callbacks=[check_point], validation_data=(x_dev, y_dev))
 
 
 if __name__ == '__main__':
