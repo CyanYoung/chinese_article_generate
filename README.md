@@ -10,13 +10,11 @@ check_index() 检查索引的连续性，对照全唐诗库找出缺损的数据
 
 #### 2.retrieve
 
-通过作者与部分标题，查找完整标题与正文
+输入作者与关键词，查找所有包含关键词的标题及正文
 
 #### 3.explore
 
 统计作者、标题、正文词汇、正文长度的频率，条形图可视化
-
-计算 sent / word_per_sent 句词丰富度指标
 
 #### 4.represent
 
@@ -26,11 +24,9 @@ align() 将正文首字作为滑窗末字，填充或截取定长序列 align_se
 
 #### 5.build
 
-train 90% / dev 10% 划分，next_inds 使用 to_categorical() 编码后超过内存限制
+train 80% / dev 20% 划分，next_inds 使用 to_categorical() 编码后超过内存限制
 
-get_portion() 每次读取 20% 的数据训练
-
-单层 rnn_plain 和 双层 rnn_stack 构建语言生成模型
+get_part() 每次读取 20% 的训练数据训练，通过单层和双层 rnn 构建语言生成模型
 
 #### 6.generate
 
@@ -38,6 +34,6 @@ get_portion() 每次读取 20% 的数据训练
 
 sample() 获取概率前 10 的字重新归一化，当逗号、句号为最大概率时直接返回
 
-当长度小于 min_len 时循环采样直到返回非结束符
+当长度小于 min_len 时生成结束符则丢弃并继续采样
 
-当长度大于 min_len 且生成结束符或长度大于 max_len 时停止
+当长度大于 min_len 时生成结束符或长度大于 max_len 时停止

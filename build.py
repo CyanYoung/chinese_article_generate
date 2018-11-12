@@ -71,7 +71,7 @@ def fit(name, epoch, embed_mat, align_seqs, next_inds, step):
     seq_len = len(align_seqs[0])
     model = compile(name, embed_mat, seq_len)
     check_point = ModelCheckpoint(map_item(name, paths), monitor='val_loss', verbose=True, save_best_only=True)
-    seq_train, ind_train, x_dev, y_dev = split(0.9, align_seqs, next_inds, vocab_num)
+    seq_train, ind_train, x_dev, y_dev = split(0.8, align_seqs, next_inds, vocab_num)
     for l_rate in np.arange(0, 1, step):
         x_train, y_train = get_part(l_rate, step, seq_train, ind_train, vocab_num)  # limit memory
         model.fit(x_train, y_train, batch_size=batch_size, epochs=epoch,
