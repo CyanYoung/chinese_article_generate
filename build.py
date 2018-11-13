@@ -1,7 +1,8 @@
 import pickle as pk
 
 import numpy as np
-from numpy.random import shuffle
+
+from random import shuffle
 
 from keras.models import Model
 from keras.layers import Input, Embedding
