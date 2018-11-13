@@ -7,21 +7,36 @@ from gensim.models.word2vec import Word2Vec
 from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 
-from util import flat_read, add_flag
+from util import flat_read
 
 
 embed_len = 200
 min_freq = 10
 max_vocab = 5000
-seq_len = 20
+seq_len = 100
+
+bos, eos = '*', '#'
 
 path_word_vec = 'feat/word_vec.pkl'
 path_word2ind = 'model/word2ind.pkl'
 path_embed = 'feat/embed.pkl'
 
 
-def word2vec(sents, path_word_vec):
-    model = Word2Vec(sents, size=embed_len, window=3, min_count=min_freq, negative=5, iter=10)
+def add_flag(texts):
+    flag_texts = list()
+    for text in texts:
+        flag_texts.append(bos + text + eos)
+    return flag_texts
+
+
+def shift(flag_texts):
+    sents = [text[:-1] for text in flag_texts]
+    labels = [text[1:] for text in flag_texts]
+    return sents, labels
+
+
+def word2vec(texts, path_word_vec):
+    model = Word2Vec(texts, size=embed_len, window=3, min_count=min_freq, negative=5, iter=10)
     word_vecs = model.wv
     with open(path_word_vec, 'wb') as f:
         pk.dump(word_vecs, f)
@@ -31,9 +46,9 @@ def word2vec(sents, path_word_vec):
             print(word_vecs.most_similar(word))
 
 
-def embed(sents, path_word2ind, path_word_vec, path_embed):
+def embed(texts, path_word2ind, path_word_vec, path_embed):
     model = Tokenizer(num_words=max_vocab, filters='', char_level=True)
-    model.fit_on_texts(sents)
+    model.fit_on_texts(texts)
     word_inds = model.word_index
     with open(path_word2ind, 'wb') as f:
         pk.dump(model, f)
@@ -50,33 +65,35 @@ def embed(sents, path_word2ind, path_word_vec, path_embed):
         pk.dump(embed_mat, f)
 
 
-def align(sents, path_align_seq, path_next_ind):
+def align(sents, path):
     with open(path_word2ind, 'rb') as f:
         model = pk.load(f)
     seqs = model.texts_to_sequences(sents)
     align_seqs = list()
-    next_inds = list()
     for seq in seqs:
-        for u_bound in range(1, len(seq)):
-            align_seq = pad_sequences([seq[:u_bound]], maxlen=seq_len)[0]
-            align_seqs.append(align_seq)
-            next_inds.append(seq[u_bound])
-    with open(path_align_seq, 'wb') as f:
+        while len(seq) > seq_len:
+            trunc_seq = seq[:seq_len]
+            align_seqs.append(trunc_seq)
+            seq = seq[seq_len:]
+        pad_seq = pad_sequences([seq], maxlen=seq_len)[0]
+        align_seqs.append(pad_seq)
+    align_seqs = np.array(align_seqs)
+    with open(path, 'wb') as f:
         pk.dump(align_seqs, f)
-    with open(path_next_ind, 'wb') as f:
-        pk.dump(next_inds, f)
 
 
-def vectorize(path_train, path_align_seq, path_next_ind):
+def vectorize(path_train, path_sent, path_label):
     texts = flat_read(path_train, 'text')
-    sents = add_flag(texts)
-    word2vec(sents, path_word_vec)
-    embed(sents, path_word2ind, path_word_vec, path_embed)
-    align(sents, path_align_seq, path_next_ind)
+    flag_texts = add_flag(texts)
+    word2vec(flag_texts, path_word_vec)
+    embed(flag_texts, path_word2ind, path_word_vec, path_embed)
+    sents, labels = shift(flag_texts)
+    align(sents, path_sent)
+    align(labels, path_label)
 
 
 if __name__ == '__main__':
     path_train = 'data/train.csv'
-    path_align_seq = 'feat/align_seq.pkl'
-    path_next_ind = 'feat/next_ind.pkl'
-    vectorize(path_train, path_align_seq, path_next_ind)
+    path_sent = 'feat/align_seq.pkl'
+    path_label = 'feat/next_ind.pkl'
+    vectorize(path_train, path_sent, path_label)
