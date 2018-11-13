@@ -2,8 +2,6 @@ import pickle as pk
 
 import numpy as np
 
-from random import shuffle
-
 from keras.models import Model
 from keras.layers import Input, Embedding
 from keras.optimizers import Adam
@@ -15,7 +13,7 @@ from nn_arch import rnn_plain, rnn_stack
 from util import map_item
 
 
-batch_size = 32
+batch_size = 512
 
 path_embed = 'feat/embed.pkl'
 path_align_seq = 'feat/align_seq.pkl'
@@ -49,9 +47,6 @@ def compile(name, embed_mat, seq_len):
 
 
 def split(rate, align_seqs, next_inds, vocab_num):
-    seqs_inds = list(zip(align_seqs, next_inds))
-    shuffle(seqs_inds)
-    align_seqs, next_inds = zip(*seqs_inds)
     bound = int(len(align_seqs) * rate)
     seq_train, ind_train = align_seqs[:bound], next_inds[:bound]
     x_dev = np.array(align_seqs[bound:])
