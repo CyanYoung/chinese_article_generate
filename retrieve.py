@@ -4,11 +4,11 @@ import re
 
 
 path_poetry = 'dict/poetry.json'
+with open(path_poetry, 'r') as f:
+    poetry = json.load(f)
 
 
-def retrieve(path_poetry):
-    with open(path_poetry, 'r') as f:
-        poetry = json.load(f)
+def retrieve():
     poet = input('poet: ')
     if poet in poetry:
         key = input('title: ')
@@ -29,4 +29,4 @@ def retrieve(path_poetry):
 
 if __name__ == '__main__':
     while True:
-        retrieve(path_poetry)
+        retrieve()
