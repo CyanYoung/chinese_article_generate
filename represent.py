@@ -11,8 +11,8 @@ from util import flat_read, add_flag
 
 
 embed_len = 200
-min_freq = 50
-max_vocab = 3000
+min_freq = 10
+max_vocab = 5000
 seq_len = 20
 
 path_word_vec = 'feat/word_vec.pkl'
