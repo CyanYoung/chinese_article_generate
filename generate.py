@@ -17,8 +17,8 @@ def ind2word(word_inds):
 
 
 seq_len = 20
-min_len = 30
-max_len = 200
+min_len = 20
+max_len = 100
 
 bos, eos = '*', '#'
 
