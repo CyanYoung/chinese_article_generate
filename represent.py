@@ -13,7 +13,7 @@ from util import flat_read
 embed_len = 200
 min_freq = 10
 max_vocab = 5000
-seq_len = 100
+seq_len = 20
 
 bos, eos = '*', '#'
 

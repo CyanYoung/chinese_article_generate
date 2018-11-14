@@ -16,7 +16,7 @@ def ind2word(word_inds):
     return ind_words
 
 
-seq_len = 100
+seq_len = 20
 min_len = 30
 max_len = 200
 
@@ -62,7 +62,7 @@ def predict(text, name):
         seq = word2ind.texts_to_sequences([sent])[0]
         align_seq = pad_sequences([seq], maxlen=seq_len)
         model = map_item(name, models)
-        probs = model.predict(align_seq)[0]
+        probs = model.predict(align_seq)[0][-1]
         next_word = sample(probs, len(sent), word_inds, ind_words, cand=10)
     return sent[1:]
 
