@@ -13,7 +13,7 @@ from util import flat_read
 embed_len = 200
 min_freq = 10
 max_vocab = 5000
-seq_len = 20
+seq_len = 100
 
 bos, eos = '*', '#'
 
@@ -65,7 +65,7 @@ def embed(texts, path_word2ind, path_word_vec, path_embed):
         pk.dump(embed_mat, f)
 
 
-def align(sents, path):
+def align(sents, path_sent):
     with open(path_word2ind, 'rb') as f:
         model = pk.load(f)
     seqs = model.texts_to_sequences(sents)
@@ -78,15 +78,16 @@ def align(sents, path):
         pad_seq = pad_sequences([seq], maxlen=seq_len)[0]
         align_seqs.append(pad_seq)
     align_seqs = np.array(align_seqs)
-    with open(path, 'wb') as f:
+    with open(path_sent, 'wb') as f:
         pk.dump(align_seqs, f)
 
 
-def vectorize(path_train, path_sent, path_label):
+def vectorize(path_train, path_sent, path_label, train):
     texts = flat_read(path_train, 'text')
     flag_texts = add_flag(texts)
-    word2vec(flag_texts, path_word_vec)
-    embed(flag_texts, path_word2ind, path_word_vec, path_embed)
+    if train:
+        word2vec(flag_texts, path_word_vec)
+        embed(flag_texts, path_word2ind, path_word_vec, path_embed)
     sents, labels = shift(flag_texts)
     align(sents, path_sent)
     align(labels, path_label)
@@ -96,4 +97,4 @@ if __name__ == '__main__':
     path_train = 'data/train.csv'
     path_sent = 'feat/align_seq.pkl'
     path_label = 'feat/align_ind.pkl'
-    vectorize(path_train, path_sent, path_label)
+    vectorize(path_train, path_sent, path_label, train=False)
