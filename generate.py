@@ -16,9 +16,9 @@ def ind2word(word_inds):
     return ind_words
 
 
-seq_len = 20
-min_len = 20
-max_len = 100
+seq_len = 100
+min_len = 30
+max_len = 200
 
 bos, eos = '*', '#'
 
@@ -55,9 +55,7 @@ def sample(probs, sent_len, word_inds, ind_words, cand):
 
 
 def predict(text, name):
-    sent = text.strip()
-    if len(sent) < 1 or sent[0] != bos:
-        sent = bos + sent
+    sent = bos + text.strip()
     next_word = ''
     while next_word != eos and len(sent) < max_len:
         sent = sent + next_word
