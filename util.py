@@ -9,14 +9,6 @@ def flat_read(path, field):
     return items
 
 
-def add_flag(sents):
-    flag_sents = list()
-    for sent in sents:
-        flag_sent = '*' + sent + '#'
-        flag_sents.append(flag_sent)
-    return flag_sents
-
-
 def map_item(name, items):
     if name in items:
         return items[name]

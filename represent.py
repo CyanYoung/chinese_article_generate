@@ -95,5 +95,5 @@ def vectorize(path_train, path_sent, path_label):
 if __name__ == '__main__':
     path_train = 'data/train.csv'
     path_sent = 'feat/align_seq.pkl'
-    path_label = 'feat/next_ind.pkl'
+    path_label = 'feat/align_ind.pkl'
     vectorize(path_train, path_sent, path_label)
