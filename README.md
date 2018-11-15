@@ -24,9 +24,9 @@ shift() 分别删去 bos、eos 得到 sent、label，align() 分别截取或填�
 
 #### 5.build
 
-train 80% / dev 20% 划分，align_inds 使用 to_categorical() 后超过内存限制
+align_inds 先进行 expand_dims、再使用 sparse_categorical_crossentropy 
 
-get_part() 每次读取 20% 的训练数据，通过单层和双层 rnn 构建语言生成模型
+避免 to_categorical() 超过内存限制， 通过单层和双层 rnn 构建语言生成模型
 
 #### 6.generate
 
