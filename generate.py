@@ -63,7 +63,7 @@ def predict(text, name):
         align_seq = pad_sequences([seq], maxlen=seq_len)
         model = map_item(name, models)
         probs = model.predict(align_seq)[0][-1]
-        next_word = sample(probs, len(sent), word_inds, ind_words, cand=10)
+        next_word = sample(probs, len(sent), word_inds, ind_words, cand=5)
     return sent[1:]
 
 
