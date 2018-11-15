@@ -87,7 +87,7 @@ def vectorize(path_train, path_sent, path_label, train):
     flag_texts = add_flag(texts)
     if train:
         word2vec(flag_texts, path_word_vec)
-        embed(flag_texts, path_word2ind, path_word_vec, path_embed)
+    embed(flag_texts, path_word2ind, path_word_vec, path_embed)
     sents, labels = shift(flag_texts)
     align(sents, path_sent)
     align(labels, path_label)

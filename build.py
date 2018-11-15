@@ -55,5 +55,5 @@ def fit(name, epoch, embed_mat, align_seqs, align_inds):
 
 
 if __name__ == '__main__':
-    fit('rnn_plain', 10, embed_mat, align_seqs, align_inds)
-    fit('rnn_stack', 10, embed_mat, align_seqs, align_inds)
+    fit('rnn_plain', 50, embed_mat, align_seqs, align_inds)
+    fit('rnn_stack', 50, embed_mat, align_seqs, align_inds)
