@@ -18,7 +18,7 @@ check_index() 检查索引的连续性，对照全唐诗库找出缺损的数据
 
 #### 4.represent
 
-add_flag() 为正文添加控制符，word2vec() 按字训练词向量、构造 embed_mt
+add_flag() 为正文添加控制符，word2vec() 按字训练词向量、构造 embed_mat
 
 shift() 分别删去 bos、eos 得到 sent、label，align() 分别截取或填充为定长序列
 
