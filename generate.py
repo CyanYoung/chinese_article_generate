@@ -16,7 +16,7 @@ def ind2word(word_inds):
     return ind_words
 
 
-seq_len = 20
+seq_len = 100
 min_len = 20
 max_len = 100
 
@@ -27,10 +27,12 @@ with open(path_word2ind, 'rb') as f:
     word2ind = pk.load(f)
 word_inds = word2ind.word_index
 
-ind_words = ind2word(word_inds)
+eos_ind = word_inds[eos]
 
 puncs = ['，', '。']
 punc_inds = [word_inds[punc] for punc in puncs]
+
+ind_words = ind2word(word_inds)
 
 paths = {'rnn_plain': 'model/rnn_plain.h5',
          'rnn_stack': 'model/rnn_stack.h5'}
@@ -46,8 +48,8 @@ def sample(probs, sent_len, cand):
     if max_inds[0] in punc_inds:
         next_ind = max_inds[0]
     elif sent_len < min_len:
-        next_ind = word_inds[eos]
-        while next_ind == word_inds[eos]:
+        next_ind = eos_ind
+        while next_ind == eos_ind:
             next_ind = choice(max_inds, p=max_probs)
     else:
         next_ind = choice(max_inds, p=max_probs)
