@@ -7,7 +7,7 @@ from keras.layers import Input, Embedding
 from keras.optimizers import Adam
 from keras.callbacks import ModelCheckpoint
 
-from nn_arch import rnn_plain, rnn_stack
+from nn_arch import rnn, cnn
 
 from util import map_item
 
@@ -15,20 +15,20 @@ from util import map_item
 batch_size = 512
 
 path_embed = 'feat/embed.pkl'
-path_align_seq = 'feat/align_seq.pkl'
-path_align_ind = 'feat/align_ind.pkl'
+path_sent = 'feat/sent.pkl'
+path_label = 'feat/label.pkl'
 with open(path_embed, 'rb') as f:
     embed_mat = pk.load(f)
-with open(path_align_seq, 'rb') as f:
-    align_seqs = pk.load(f)
-with open(path_align_ind, 'rb') as f:
-    align_inds = pk.load(f)
+with open(path_sent, 'rb') as f:
+    sents = pk.load(f)
+with open(path_label, 'rb') as f:
+    labels = pk.load(f)
 
-funcs = {'rnn_plain': rnn_plain,
-         'rnn_stack': rnn_stack}
+funcs = {'rnn': rnn,
+         'cnn': cnn}
 
-paths = {'rnn_plain': 'model/rnn_plain.h5',
-         'rnn_stack': 'model/rnn_stack.h5'}
+paths = {'rnn': 'model/rnn.h5',
+         'cnn': 'model/cnn.h5'}
 
 
 def compile(name, embed_mat, seq_len):
@@ -45,15 +45,15 @@ def compile(name, embed_mat, seq_len):
     return model
 
 
-def fit(name, epoch, embed_mat, align_seqs, align_inds):
-    seq_len = len(align_seqs[0])
+def fit(name, epoch, embed_mat, sents, labels):
+    seq_len = len(sents[0])
     model = compile(name, embed_mat, seq_len)
     check_point = ModelCheckpoint(map_item(name, paths), monitor='val_loss', verbose=True, save_best_only=True)
-    align_inds = np.expand_dims(align_inds, -1)
-    model.fit(align_seqs, align_inds, batch_size=batch_size, epochs=epoch,
+    labels = np.expand_dims(labels, -1)
+    model.fit(sents, labels, batch_size=batch_size, epochs=epoch,
               verbose=True, callbacks=[check_point], validation_split=0.2)
 
 
 if __name__ == '__main__':
-    fit('rnn_plain', 50, embed_mat, align_seqs, align_inds)
-    fit('rnn_stack', 50, embed_mat, align_seqs, align_inds)
+    fit('rnn', 50, embed_mat, sents, labels)
+    fit('cnn', 50, embed_mat, sents, labels)

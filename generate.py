@@ -34,11 +34,11 @@ punc_inds = [word_inds[punc] for punc in puncs]
 
 ind_words = ind2word(word_inds)
 
-paths = {'rnn_plain': 'model/rnn_plain.h5',
-         'rnn_stack': 'model/rnn_stack.h5'}
+paths = {'rnn': 'model/rnn.h5',
+         'cnn': 'model/cnn.h5'}
 
-models = {'rnn_plain': load_model(map_item('rnn_plain', paths)),
-          'rnn_stack': load_model(map_item('rnn_stack', paths))}
+models = {'rnn': load_model(map_item('rnn', paths)),
+          'cnn': load_model(map_item('cnn', paths))}
 
 
 def sample(probs, sent_len, cand):
@@ -72,5 +72,5 @@ def predict(text, name):
 if __name__ == '__main__':
     while True:
         text = input('text: ')
-        print('plain: %s' % predict(text, 'rnn_plain'))
-        print('stack: %s' % predict(text, 'rnn_stack'))
+        print('rnn: %s' % predict(text, 'rnn'))
+        print('cnn: %s' % predict(text, 'cnn'))
