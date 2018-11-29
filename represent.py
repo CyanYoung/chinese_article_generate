@@ -13,6 +13,7 @@ from util import flat_read
 embed_len = 200
 min_freq = 10
 max_vocab = 5000
+win_len = 10
 seq_len = 100
 
 bos, eos = '*', '#'
@@ -65,7 +66,15 @@ def embed(texts, path_word2ind, path_word_vec, path_embed):
         pk.dump(embed_mat, f)
 
 
-def align(sents, path_sent):
+def add_buf(seqs):
+    buf = [0] * (win_len - 1)
+    buf_seqs = list()
+    for seq in seqs:
+        buf_seqs.append(buf + seq)
+    return buf_seqs
+
+
+def align(sents, path_sent, extra):
     with open(path_word2ind, 'rb') as f:
         model = pk.load(f)
     seqs = model.texts_to_sequences(sents)
@@ -75,26 +84,32 @@ def align(sents, path_sent):
             trunc_seq = seq[:seq_len]
             align_seqs.append(trunc_seq)
             seq = seq[seq_len:]
-        pad_seq = pad_sequences([seq], maxlen=seq_len)[0]
+        pad_seq = pad_sequences([seq], maxlen=seq_len)[0].tolist()
         align_seqs.append(pad_seq)
+    if extra:
+        align_seqs = add_buf(align_seqs)
     align_seqs = np.array(align_seqs)
     with open(path_sent, 'wb') as f:
         pk.dump(align_seqs, f)
 
 
-def vectorize(path_train, path_sent, path_label, train):
+def vectorize(path_train, train):
     texts = flat_read(path_train, 'text')
     flag_texts = add_flag(texts)
     if train:
         word2vec(flag_texts, path_word_vec)
     embed(flag_texts, path_word2ind, path_word_vec, path_embed)
-    sents, labels = shift(flag_texts)
-    align(sents, path_sent)
-    align(labels, path_label)
+    return shift(flag_texts)
 
 
 if __name__ == '__main__':
     path_train = 'data/train.csv'
-    path_sent = 'feat/sent.pkl'
-    path_label = 'feat/label.pkl'
-    vectorize(path_train, path_sent, path_label, train=False)
+    sents, labels = vectorize(path_train, train=False)
+    path_sent = 'feat/rnn_sent.pkl'
+    align(sents, path_sent, extra=False)
+    path_label = 'feat/rnn_label.pkl'
+    align(labels, path_label, extra=False)
+    path_sent = 'feat/cnn_sent.pkl'
+    align(sents, path_sent, extra=True)
+    path_label = 'feat/cnn_label.pkl'
+    align(labels, path_label, extra=False)
