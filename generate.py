@@ -16,6 +16,7 @@ def ind2word(word_inds):
     return ind_words
 
 
+win_len = 10
 seq_len = 100
 min_len = 20
 max_len = 100
@@ -58,11 +59,12 @@ def sample(probs, sent_len, cand):
 
 def predict(text, name):
     sent = bos + text.strip()
+    pad_len = seq_len + win_len - 1 if name == 'cnn' else seq_len
     next_word = ''
     while next_word != eos and len(sent) < max_len:
         sent = sent + next_word
         seq = word2ind.texts_to_sequences([sent])[0]
-        align_seq = pad_sequences([seq], maxlen=seq_len)
+        align_seq = pad_sequences([seq], maxlen=pad_len)
         model = map_item(name, models)
         probs = model.predict(align_seq)[0][-1]
         next_word = sample(probs, len(sent), cand=5)
