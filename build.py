@@ -15,12 +15,15 @@ from util import map_item
 batch_size = 512
 
 path_embed = 'feat/embed.pkl'
-path_sent = 'feat/sent.pkl'
+path_rnn_sent = 'feat/rnn_sent.pkl'
+path_cnn_sent = 'feat/cnn_sent.pkl'
 path_label = 'feat/label.pkl'
 with open(path_embed, 'rb') as f:
     embed_mat = pk.load(f)
-with open(path_sent, 'rb') as f:
-    sents = pk.load(f)
+with open(path_rnn_sent, 'rb') as f:
+    rnn_sents = pk.load(f)
+with open(path_cnn_sent, 'rb') as f:
+    cnn_sents = pk.load(f)
 with open(path_label, 'rb') as f:
     labels = pk.load(f)
 
@@ -55,5 +58,5 @@ def fit(name, epoch, embed_mat, sents, labels):
 
 
 if __name__ == '__main__':
-    fit('rnn', 50, embed_mat, sents, labels)
-    fit('cnn', 50, embed_mat, sents, labels)
+    fit('rnn', 50, embed_mat, rnn_sents, labels)
+    fit('cnn', 50, embed_mat, cnn_sents, labels)

@@ -107,9 +107,7 @@ if __name__ == '__main__':
     sents, labels = vectorize(path_train, train=False)
     path_sent = 'feat/rnn_sent.pkl'
     align(sents, path_sent, extra=False)
-    path_label = 'feat/rnn_label.pkl'
-    align(labels, path_label, extra=False)
     path_sent = 'feat/cnn_sent.pkl'
     align(sents, path_sent, extra=True)
-    path_label = 'feat/cnn_label.pkl'
+    path_label = 'feat/label.pkl'
     align(labels, path_label, extra=False)
