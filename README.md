@@ -24,7 +24,7 @@ shift() 分别删去 bos、eos 得到 sent、label，align() 分别截取或填�
 
 #### 5.build
 
-labels 先进行 expand_dims 再使用 sparse_categorical_crossentropy 
+label 先进行 expand_dims、再使用 sparse_categorical_crossentropy 
 
 避免 to_categorical() 超过内存限制， 通过 rnn、cnn 构建语言生成模型
 
