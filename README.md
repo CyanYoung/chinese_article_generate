@@ -22,9 +22,11 @@ add_flag() 添加控制符，word2vec() 按字训练词向量、构造 embed_mat
 
 shift() 分别删去 bos、eos 得到 sent、label，align() 分别截取或填充为定长序列
 
+add_buf 对 cnn_sent 头部再进行 (win_len - 1) 填充、与 label 对齐
+
 #### 5.build
 
-label 先进行 expand_dims 再使用 sparse_categorical_crossentropy 
+label 先 expand_dims、再使用 sparse_categorical_crossentropy 
 
 避免 to_categorical() 超过内存限制， 通过 rnn、cnn 构建语言生成模型
 
