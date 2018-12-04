@@ -22,7 +22,7 @@ add_flag() 添加控制符，word2vec() 按字训练词向量、构造 embed_mat
 
 shift() 分别删去 bos、eos 得到 sent、label，align() 分别截取或填充为定长序列
 
-add_buf 对 cnn_sent 头部再进行 (win_len - 1) 填充、与 label 对齐
+add_buf() 再对 cnn_sent 头部进行 win_len - 1 填充、对齐 label
 
 #### 5.build
 
