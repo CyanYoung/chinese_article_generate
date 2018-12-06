@@ -12,8 +12,7 @@ def retrieve():
     poet = input('poet: ')
     if poet in poetry:
         key = input('title: ')
-        titles = list()
-        texts = list()
+        titles, texts = list(), list()
         for cand in poetry[poet].keys():
             if re.findall(key, cand):
                 titles.append(cand)

@@ -14,8 +14,7 @@ def check_index(quaples):
 
 
 def prepare(path_train_txt, path_train_csv, path_poetry, detail):
-    quaples = list()
-    poetry = dict()
+    quaples, poetry = list(), dict()
     with open(path_train_txt, 'r') as f:
         for line in f:
             fields = line.strip().split('\t')
