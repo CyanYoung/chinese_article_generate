@@ -21,9 +21,9 @@ def retrieve():
             for title, text in zip(titles, texts):
                 print('%s：%s' % (title, text))
         else:
-            print('invalid title')
+            print('no title')
     else:
-        print('invalid poet')
+        print('no poet')
 
 
 if __name__ == '__main__':

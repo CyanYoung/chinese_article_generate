@@ -13,10 +13,10 @@ def check_index(quaples):
             print('{}_{} -> {}_{}'.format(num1, num2, next_num1, next_num2))
 
 
-def prepare(path_train_txt, path_train_csv, path_poetry, detail):
+def prepare(path_univ, path_train, path_poetry, detail):
     quaples = list()
     poetry = dict()
-    with open(path_train_txt, 'r') as f:
+    with open(path_univ, 'r') as f:
         for line in f:
             fields = line.strip().split('\t')
             if len(fields) != 4:
@@ -31,7 +31,7 @@ def prepare(path_train_txt, path_train_csv, path_poetry, detail):
     if detail:
         check_index(quaples)
     shuffle(quaples)
-    with open(path_train_csv, 'w') as f:
+    with open(path_train, 'w') as f:
         f.write('poet,title,text' + '\n')
         for num, title, poet, text in quaples:
             f.write(poet + ',' + title + ',' + text + '\n')
@@ -40,7 +40,7 @@ def prepare(path_train_txt, path_train_csv, path_poetry, detail):
 
 
 if __name__ == '__main__':
-    path_train_txt = 'data/train.txt'
-    path_train_csv = 'data/train.csv'
+    path_univ = 'data/univ.txt'
+    path_train = 'data/train.csv'
     path_poetry = 'dict/poetry.json'
-    prepare(path_train_txt, path_train_csv, path_poetry, detail=False)
+    prepare(path_univ, path_train, path_poetry, detail=False)
