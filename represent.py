@@ -16,7 +16,7 @@ max_vocab = 5000
 win_len = 10
 seq_len = 100
 
-bos, eos = '*', '#'
+bos, eos = '<', '>'
 
 path_word_vec = 'feat/word_vec.pkl'
 path_word2ind = 'model/word2ind.pkl'

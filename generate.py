@@ -21,7 +21,7 @@ seq_len = 100
 min_len = 20
 max_len = 100
 
-bos, eos = '*', '#'
+bos, eos = '<', '>'
 
 path_word2ind = 'model/word2ind.pkl'
 with open(path_word2ind, 'rb') as f:
