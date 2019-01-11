@@ -1,4 +1,4 @@
-## Chinese Poetry Generate 2018-8
+## Chinese Article Generate 2018-8
 
 #### 1.preprocess
 
