@@ -42,6 +42,14 @@ models = {'rnn': load_model(map_item('rnn', paths)),
           'cnn': load_model(map_item('cnn', paths))}
 
 
+def search(probs, sent_len):
+    sort_inds = np.argsort(-probs)
+    next_ind = sort_inds[0]
+    if next_ind == eos_ind and sent_len < min_len:
+        next_ind = sort_inds[1]
+    return ind_words[next_ind]
+
+
 def sample(probs, sent_len, cand):
     max_probs = np.array(sorted(probs, reverse=True)[:cand])
     max_probs = max_probs / np.sum(max_probs)
@@ -57,22 +65,27 @@ def sample(probs, sent_len, cand):
     return ind_words[next_ind]
 
 
-def predict(text, name):
+def predict(text, name, mode):
     sent = bos + text.strip()
+    model = map_item(name, models)
     pad_len = seq_len + win_len - 1 if name == 'cnn' else seq_len
     next_word = ''
     while next_word != eos and len(sent) < max_len:
         sent = sent + next_word
         seq = word2ind.texts_to_sequences([sent])[0]
         align_seq = pad_sequences([seq], maxlen=pad_len)
-        model = map_item(name, models)
         probs = model.predict(align_seq)[0][-1]
-        next_word = sample(probs, len(sent), cand=5)
+        if mode == 'sample':
+            next_word = sample(probs, len(sent), cand=5)
+        else:
+            next_word = search(probs, len(sent))
     return sent[1:]
 
 
 if __name__ == '__main__':
     while True:
         text = input('text: ')
-        print('rnn: %s' % predict(text, 'rnn'))
-        print('cnn: %s' % predict(text, 'cnn'))
+        print('rnn: %s' % predict(text, 'rnn', 'search'))
+        print('cnn: %s' % predict(text, 'cnn', 'search'))
+        print('rnn: %s' % predict(text, 'rnn', 'sample'))
+        print('cnn: %s' % predict(text, 'cnn', 'sample'))
