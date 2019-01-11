@@ -3,6 +3,13 @@ import json
 from random import shuffle
 
 
+def save(path, quaples):
+    with open(path, 'w') as f:
+        f.write('poet,title,text' + '\n')
+        for num, title, poet, text in quaples:
+            f.write(poet + ',' + title + ',' + text + '\n')
+
+
 def check_index(quaples):
     nums = [fields[0] for fields in quaples]
     for i in range(len(nums) - 1):
@@ -13,7 +20,7 @@ def check_index(quaples):
             print('{}_{} -> {}_{}'.format(num1, num2, next_num1, next_num2))
 
 
-def prepare(path_univ, path_train, path_poetry, detail):
+def prepare(path_univ, path_train, path_test, path_poetry, detail):
     quaples = list()
     poetry = dict()
     with open(path_univ, 'r') as f:
@@ -31,10 +38,9 @@ def prepare(path_univ, path_train, path_poetry, detail):
     if detail:
         check_index(quaples)
     shuffle(quaples)
-    with open(path_train, 'w') as f:
-        f.write('poet,title,text' + '\n')
-        for num, title, poet, text in quaples:
-            f.write(poet + ',' + title + ',' + text + '\n')
+    bound = int(len(quaples) * 0.9)
+    save(path_train, quaples[:bound])
+    save(path_test, quaples[bound:])
     with open(path_poetry, 'w') as f:
         json.dump(poetry, f, ensure_ascii=False, indent=4)
 
@@ -42,5 +48,6 @@ def prepare(path_univ, path_train, path_poetry, detail):
 if __name__ == '__main__':
     path_univ = 'data/univ.txt'
     path_train = 'data/train.csv'
+    path_test = 'data/test.csv'
     path_poetry = 'dict/poetry.json'
-    prepare(path_univ, path_train, path_poetry, detail=False)
+    prepare(path_univ, path_train, path_test, path_poetry, detail=False)
