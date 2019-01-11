@@ -10,16 +10,16 @@ from util import map_item
 path_rnn_sent = 'feat/rnn_sent_train.pkl'
 path_cnn_sent = 'feat/cnn_sent_train.pkl'
 path_label = 'feat/label.pkl'
+path_word2ind = 'model/word2ind.pkl'
 with open(path_rnn_sent, 'rb') as f:
     rnn_sents = pk.load(f)
 with open(path_cnn_sent, 'rb') as f:
     cnn_sents = pk.load(f)
 with open(path_label, 'rb') as f:
     labels = pk.load(f)
-
-path_word2ind = 'model/word2ind.pkl'
 with open(path_word2ind, 'rb') as f:
     word2ind = pk.load(f)
+
 word_inds = word2ind.word_index
 
 paths = {'rnn': 'model/rnn.h5',
