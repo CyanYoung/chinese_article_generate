@@ -15,8 +15,8 @@ from util import map_item
 batch_size = 512
 
 path_embed = 'feat/embed.pkl'
-path_rnn_sent = 'feat/rnn_sent.pkl'
-path_cnn_sent = 'feat/cnn_sent.pkl'
+path_rnn_sent = 'feat/rnn_sent_train.pkl'
+path_cnn_sent = 'feat/cnn_sent_train.pkl'
 path_label = 'feat/label.pkl'
 with open(path_embed, 'rb') as f:
     embed_mat = pk.load(f)
