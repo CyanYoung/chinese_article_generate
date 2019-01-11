@@ -93,21 +93,28 @@ def align(sents, path_sent, extra):
         pk.dump(align_seqs, f)
 
 
-def vectorize(path_train, train):
-    texts = flat_read(path_train, 'text')
+def vectorize(paths, mode, update):
+    texts = flat_read(paths['data'], 'text')
     flag_texts = add_flag(texts)
-    if train:
+    if update:
         word2vec(flag_texts, path_word_vec)
-    embed(flag_texts, path_word2ind, path_word_vec, path_embed)
-    return shift(flag_texts)
+    if mode == 'train':
+        embed(flag_texts, path_word2ind, path_word_vec, path_embed)
+    sents, labels = shift(flag_texts)
+    align(sents, paths['rnn_sent'], extra=False)
+    align(sents, paths['cnn_sent'], extra=True)
+    align(labels, paths['label'], extra=False)
 
 
 if __name__ == '__main__':
-    path_train = 'data/train.csv'
-    sents, labels = vectorize(path_train, train=False)
-    path_sent = 'feat/rnn_sent.pkl'
-    align(sents, path_sent, extra=False)
-    path_sent = 'feat/cnn_sent.pkl'
-    align(sents, path_sent, extra=True)
-    path_label = 'feat/label.pkl'
-    align(labels, path_label, extra=False)
+    paths = dict()
+    paths['data'] = 'data/train.csv'
+    paths['rnn_sent'] = 'feat/rnn_sent_train.pkl'
+    paths['cnn_sent'] = 'feat/cnn_sent_train.pkl'
+    paths['label'] = 'feat/label_train.pkl'
+    vectorize(paths, 'train', update=False)
+    paths['data'] = 'data/test.csv'
+    paths['rnn_sent'] = 'feat/rnn_sent_test.pkl'
+    paths['cnn_sent'] = 'feat/cnn_sent_test.pkl'
+    paths['label'] = 'feat/label_test.pkl'
+    vectorize(paths, 'test', update=False)
