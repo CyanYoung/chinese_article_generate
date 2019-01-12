@@ -37,7 +37,7 @@ def test(name, sents, labels):
         for i in range(bound, seq_len):
             sent_log = sent_log + np.log(prob[i][label[i]])
         log_sum = log_sum + sent_log
-    print('\n%s %s %.2f\n' % (name, 'perp:', np.power(2, -log_sum / len_sum)))
+    print('\n%s %s %.2f' % (name, 'perp:', np.power(2, -log_sum / len_sum)))
 
 
 if __name__ == '__main__':
