@@ -32,8 +32,6 @@ label 先 expand_dims、再使用 sparse_categorical_crossentropy
 
 #### 6.generate
 
-通过 word_inds 建立反向字典 ind_words，截取或填充输入序列
-
 对概率前 5 的输出归一化后采样，逗号、句号为最大概率则直接返回
 
 生成结束符或长度大于 max_len 时停止、小于 min_len 则采样直到非结束符
