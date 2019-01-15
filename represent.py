@@ -101,20 +101,20 @@ def vectorize(paths, mode, update):
     if mode == 'train':
         embed(flag_texts, path_word2ind, path_word_vec, path_embed)
     sents, labels = shift(flag_texts)
-    align(sents, paths['rnn_sent'], extra=False)
     align(sents, paths['cnn_sent'], extra=True)
+    align(sents, paths['rnn_sent'], extra=False)
     align(labels, paths['label'], extra=False)
 
 
 if __name__ == '__main__':
     paths = dict()
     paths['data'] = 'data/train.csv'
-    paths['rnn_sent'] = 'feat/rnn_sent_train.pkl'
     paths['cnn_sent'] = 'feat/cnn_sent_train.pkl'
+    paths['rnn_sent'] = 'feat/rnn_sent_train.pkl'
     paths['label'] = 'feat/label_train.pkl'
     vectorize(paths, 'train', update=False)
     paths['data'] = 'data/test.csv'
-    paths['rnn_sent'] = 'feat/rnn_sent_test.pkl'
     paths['cnn_sent'] = 'feat/cnn_sent_test.pkl'
+    paths['rnn_sent'] = 'feat/rnn_sent_test.pkl'
     paths['label'] = 'feat/label_test.pkl'
     vectorize(paths, 'test', update=False)

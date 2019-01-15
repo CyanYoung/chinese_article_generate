@@ -9,21 +9,21 @@ from util import map_item
 
 seq_len = 100
 
-path_rnn_sent = 'feat/rnn_sent_test.pkl'
 path_cnn_sent = 'feat/cnn_sent_test.pkl'
+path_rnn_sent = 'feat/rnn_sent_test.pkl'
 path_label = 'feat/label_test.pkl'
-with open(path_rnn_sent, 'rb') as f:
-    rnn_sents = pk.load(f)
 with open(path_cnn_sent, 'rb') as f:
     cnn_sents = pk.load(f)
+with open(path_rnn_sent, 'rb') as f:
+    rnn_sents = pk.load(f)
 with open(path_label, 'rb') as f:
     labels = pk.load(f)
 
-paths = {'rnn': 'model/rnn.h5',
-         'cnn': 'model/cnn.h5'}
+paths = {'cnn': 'model/cnn.h5',
+         'rnn': 'model/rnn.h5'}
 
-models = {'rnn': load_model(map_item('rnn', paths)),
-          'cnn': load_model(map_item('cnn', paths))}
+models = {'cnn': load_model(map_item('cnn', paths)),
+          'rnn': load_model(map_item('rnn', paths))}
 
 
 def test(name, sents, labels):
@@ -41,5 +41,5 @@ def test(name, sents, labels):
 
 
 if __name__ == '__main__':
-    test('rnn', rnn_sents, labels)
     test('cnn', cnn_sents, labels)
+    test('rnn', rnn_sents, labels)

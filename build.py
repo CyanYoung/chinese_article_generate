@@ -7,7 +7,7 @@ from keras.layers import Input, Embedding
 from keras.optimizers import Adam
 from keras.callbacks import ModelCheckpoint
 
-from nn_arch import rnn, cnn
+from nn_arch import cnn, rnn
 
 from util import map_item
 
@@ -15,23 +15,23 @@ from util import map_item
 batch_size = 512
 
 path_embed = 'feat/embed.pkl'
-path_rnn_sent = 'feat/rnn_sent_train.pkl'
 path_cnn_sent = 'feat/cnn_sent_train.pkl'
+path_rnn_sent = 'feat/rnn_sent_train.pkl'
 path_label = 'feat/label_train.pkl'
 with open(path_embed, 'rb') as f:
     embed_mat = pk.load(f)
-with open(path_rnn_sent, 'rb') as f:
-    rnn_sents = pk.load(f)
 with open(path_cnn_sent, 'rb') as f:
     cnn_sents = pk.load(f)
+with open(path_rnn_sent, 'rb') as f:
+    rnn_sents = pk.load(f)
 with open(path_label, 'rb') as f:
     labels = pk.load(f)
 
-funcs = {'rnn': rnn,
-         'cnn': cnn}
+funcs = {'cnn': cnn,
+         'rnn': rnn}
 
-paths = {'rnn': 'model/rnn.h5',
-         'cnn': 'model/cnn.h5'}
+paths = {'cnn': 'model/cnn.h5',
+         'rnn': 'model/rnn.h5'}
 
 
 def compile(name, embed_mat, seq_len):
@@ -58,5 +58,5 @@ def fit(name, epoch, embed_mat, sents, labels):
 
 
 if __name__ == '__main__':
-    fit('rnn', 50, embed_mat, rnn_sents, labels)
     fit('cnn', 50, embed_mat, cnn_sents, labels)
+    fit('rnn', 50, embed_mat, rnn_sents, labels)

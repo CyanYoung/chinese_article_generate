@@ -35,11 +35,11 @@ punc_inds = [word_inds[punc] for punc in puncs]
 
 ind_words = ind2word(word_inds)
 
-paths = {'rnn': 'model/rnn.h5',
-         'cnn': 'model/cnn.h5'}
+paths = {'cnn': 'model/cnn.h5',
+         'rnn': 'model/rnn.h5'}
 
-models = {'rnn': load_model(map_item('rnn', paths)),
-          'cnn': load_model(map_item('cnn', paths))}
+models = {'cnn': load_model(map_item('cnn', paths)),
+          'rnn': load_model(map_item('rnn', paths))}
 
 
 def search(probs, sent_len):
@@ -85,7 +85,7 @@ def predict(text, name, mode):
 if __name__ == '__main__':
     while True:
         text = input('text: ')
-        print('rnn: %s' % predict(text, 'rnn', 'search'))
         print('cnn: %s' % predict(text, 'cnn', 'search'))
-        print('rnn: %s' % predict(text, 'rnn', 'sample'))
+        print('rnn: %s' % predict(text, 'rnn', 'search'))
         print('cnn: %s' % predict(text, 'cnn', 'sample'))
+        print('rnn: %s' % predict(text, 'rnn', 'sample'))
