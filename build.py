@@ -17,7 +17,7 @@ batch_size = 512
 path_embed = 'feat/embed.pkl'
 path_rnn_sent = 'feat/rnn_sent_train.pkl'
 path_cnn_sent = 'feat/cnn_sent_train.pkl'
-path_label = 'feat/label.pkl'
+path_label = 'feat/label_train.pkl'
 with open(path_embed, 'rb') as f:
     embed_mat = pk.load(f)
 with open(path_rnn_sent, 'rb') as f:
