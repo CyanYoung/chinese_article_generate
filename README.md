@@ -4,9 +4,7 @@
 
 prepare() 将 txt 数据处理为 (poet, title, text) 的三元组，保存为 csv 格式
 
-建立 poetry 字典，实现作者、标题、正文的两层映射
-
-check_index() 检查索引的连续性，对照全唐诗库找出缺损的数据
+建立 poetry 字典，实现作者、标题、正文的两层映射，check() 检查索引连续性
 
 #### 2.retrieve
 

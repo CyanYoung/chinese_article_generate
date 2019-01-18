@@ -10,7 +10,7 @@ def save(path, quaples):
             f.write(poet + ',' + title + ',' + text + '\n')
 
 
-def check_index(quaples):
+def check(quaples):
     nums = [fields[0] for fields in quaples]
     for i in range(len(nums) - 1):
         num1, num2 = [int(num) for num in nums[i].split('_')]
@@ -36,7 +36,7 @@ def prepare(path_univ, path_train, path_test, path_poetry, detail):
                 poetry[poet][title] = list()
             poetry[poet][title].append(text)
     if detail:
-        check_index(quaples)
+        check(quaples)
     shuffle(quaples)
     bound = int(len(quaples) * 0.9)
     save(path_train, quaples[:bound])
