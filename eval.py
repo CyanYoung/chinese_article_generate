@@ -2,7 +2,7 @@ import pickle as pk
 
 import numpy as np
 
-from keras.models import load_model
+from generate import models
 
 from util import map_item
 
@@ -18,12 +18,6 @@ with open(path_rnn_sent, 'rb') as f:
     rnn_sents = pk.load(f)
 with open(path_label, 'rb') as f:
     labels = pk.load(f)
-
-paths = {'cnn': 'model/cnn.h5',
-         'rnn': 'model/rnn.h5'}
-
-models = {'cnn': load_model(map_item('cnn', paths)),
-          'rnn': load_model(map_item('rnn', paths))}
 
 
 def test(name, sents, labels):
