@@ -42,7 +42,7 @@ def word2vec(texts, path_word_vec):
     with open(path_word_vec, 'wb') as f:
         pk.dump(word_vecs, f)
     if __name__ == '__main__':
-        words = ['，', '。', '*', '#']
+        words = ['，', '。', '<', '>']
         for word in words:
             print(word_vecs.most_similar(word))
 
