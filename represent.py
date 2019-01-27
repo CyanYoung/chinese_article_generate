@@ -96,9 +96,9 @@ def align(sents, path_sent, extra):
 def vectorize(paths, mode, update):
     texts = flat_read(paths['data'], 'text')
     flag_texts = add_flag(texts)
-    if update:
-        word2vec(flag_texts, path_word_vec)
     if mode == 'train':
+        if update:
+            word2vec(flag_texts, path_word_vec)
         embed(flag_texts, path_word2ind, path_word_vec, path_embed)
     sents, labels = shift(flag_texts)
     align(sents, paths['cnn_sent'], extra=True)
