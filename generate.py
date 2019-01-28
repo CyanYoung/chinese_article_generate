@@ -42,13 +42,13 @@ models = {'cnn': load_model(map_item('cnn', paths)),
           'rnn': load_model(map_item('rnn', paths))}
 
 
-def sample(probs, sent_len, cand):
+def sample(probs, count, cand):
     max_probs = np.array(sorted(probs, reverse=True)[:cand])
     max_probs = max_probs / np.sum(max_probs)
     max_inds = np.argsort(-probs)[:cand]
     if max_inds[0] in punc_inds:
         next_ind = max_inds[0]
-    elif sent_len < min_len:
+    elif count < min_len:
         next_ind = eos_ind
         while next_ind == eos_ind:
             next_ind = choice(max_inds, p=max_probs)
@@ -59,15 +59,16 @@ def sample(probs, sent_len, cand):
 
 def predict(text, name):
     sent = bos + text.strip()
-    model = map_item(name, models)
     pad_len = seq_len + win_len - 1 if name == 'cnn' else seq_len
-    next_word = ''
-    while next_word != eos and len(sent) < max_len:
+    model = map_item(name, models)
+    next_word, count = '', len(text) - 1
+    while next_word != eos and count < max_len:
         sent = sent + next_word
+        count = count + 1
         seq = word2ind.texts_to_sequences([sent])[0]
-        align_seq = pad_sequences([seq], maxlen=pad_len)
-        probs = model.predict(align_seq)[0][-1]
-        next_word = sample(probs, len(sent), cand=5)
+        pad_seq = pad_sequences([seq], maxlen=pad_len)
+        probs = model.predict(pad_seq)[0][-1]
+        next_word = sample(probs, count, cand=5)
     return sent[1:]
 
 
