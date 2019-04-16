@@ -58,7 +58,7 @@ def sample(probs, count, cand):
 
 
 def predict(text, name):
-    sent = bos + text.strip()
+    sent = bos + text
     pad_len = seq_len + win_len - 1 if name == 'cnn' else seq_len
     model = map_item(name, models)
     next_word, count = '', len(text) - 1

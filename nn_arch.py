@@ -1,4 +1,4 @@
-from keras.layers import LSTM, Conv1D, Dense, Dropout, Multiply
+from keras.layers import Conv1D, LSTM, Dense, Dropout, Multiply
 
 
 win_len = 10
